@@ -31,6 +31,7 @@ public class Main {
 			creditoUtente = sc.nextInt();
 			creditoMacchina = creditoUtente + creditoMacchina;
 			System.out.println("Credito: " + creditoMacchina + "€");
+			risposta = "n";
 			
 			for (i = 0; i < codiceProdotto.length; i++) {
 				System.out.println("Codice: " + codiceProdotto[i] + " |" + " Nome: " + nomeProdotto[i] + " |"
@@ -43,42 +44,47 @@ public class Main {
 				sc.nextLine();
 				codiceValido = false;
 
-				for (i = 0; i < codiceProdotto.length; i++) {
+				for (i = 0; i < codiceProdotto.length; i++) 
 					// Verifica codice inserito
 					if (codiceInserito == codiceProdotto[i]) {
 						System.out.println("Hai selezionato il prodotto: " + nomeProdotto[i]);
 						codiceValido = true;
-
+						resto = creditoMacchina;
 						do { // Inizio do while per verificare che l'importo sia sufficiente
 
 							// Verifica se l'importo è sufficiente
 							if (creditoMacchina >= prezzoProdotto[i]) {
 								// TODO Riduzione quantità dall'array + verifica se quantità disponibile
-								quantitaProdotto[i] -= 1;
+								
+								
 							}
-							
 							resto = creditoMacchina - prezzoProdotto[i];
+							creditoMacchina-=prezzoProdotto[i];
+							
 							// Verifica se il resto è disponibile
 							if (resto > 0) {
 								System.out.println("Erogazione resto di " + resto + " €...");
-								creditoMacchina = (creditoMacchina + resto);
+								creditoMacchina = resto;
 								creditoUtente = 0;
 								resto = 0;
 							} else {
 								System.out.println("Credito insufficiente, inserire l'importo di: "
-										+ (prezzoProdotto[i] - creditoUtente) + "€");
+										+ (prezzoProdotto[i] - creditoMacchina) + "€");
 								System.out.println("Inserire credito: ");
-								creditoUtente = creditoUtente + sc.nextDouble();
+								creditoMacchina = creditoUtente + sc.nextDouble();
+								sc.nextLine();
 							}
 
 							// Fine do while per verifica importo sufficiente
 						} while (creditoMacchina < prezzoProdotto[i]);
+						
 						if (bevandaFredda[i] > 0) {
 							System.out.println("Erogazione prodotto...");
 						} else {
 							do { // Inizio do while per verifica validità zucchero
 								System.out.println("Inserisci livello di zuccherro da 1 a 5");
 								livZucchero = sc.nextInt();
+								sc.nextLine();
 								if (livZucchero > 0 && livZucchero <= 5) {
 									System.out.println("Erogazione bicchiere di plastica...");
 									System.out.println("Erogazione zucchero...");
@@ -96,7 +102,7 @@ public class Main {
 							System.out.println("Il codice inserito non è valido, riprova.");
 						}
 					}
-				} 
+				
 				// Fine ciclo do while per verifica codice
 			} while (!codiceValido);
 
