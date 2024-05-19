@@ -3,186 +3,196 @@ package org.generation.italy;
 import java.util.Scanner;
 
 public class Main {
+
 	public static void main(String[] args) {
 
 		// Creazione scanner
 		Scanner sc = new Scanner(System.in);
 		int i;
-		int codiceInserito, livZucchero, codiceGestore, codiceModifica;
-		double creditoUtente, creditoMacchina;
-		creditoMacchina = 0;
+		int codInserito, livZucchero, codGestore, codModifica;
+		double credUtente, credMacchina = 0;
 		// Creazione variabili e array
 		String[] nomeProdotto = { "Acqua", "Pepsi", "Caffè", "The", "Cioccolata" };
-		int[] codiceProdotto = { 1, 2, 3, 4, 5 };
+		int[] codProdotto = { 1, 2, 3, 4, 5 };
 		double[] prezzoProdotto = { 1.2, 2.5, 1, 1.5, 2 };
-		int[] quantitaProdotto = { 3, 2, 2, 0, 2 };
+		int[] qtaProdotto = { 3, 2, 2, 0, 2 };
 		int[] bevandaFredda = { 1, 1, 0, 1, 0 };
-		boolean codiceValido = false;
-		boolean zuccheroValido = false;
-		boolean modifica;
+		boolean codValido, prodValido, modifica, codModificaValido, zuccheroValido;
 		String nuovoNome;
-		int nuovoPrezzo, nuovaQuantita;
-
+		int nuovoPrezzo, nuovaQta;
 		String risposta;
-		double resto = 0;
+		double resto;
 
-		// Inizio do-while per ricominciare ad acquistare
+		// Inizio ciclo acquisto
 		do {
-			codiceInserito = 0;
-			creditoUtente = 0;
-			// Visualizzazione credito e aumento dal credito inserito
-			System.out.println("Credito: " + creditoMacchina + "€");
-			System.out.println("Inserisci monete: ");
-			creditoUtente = sc.nextDouble();
-			creditoMacchina += creditoUtente;
-			System.out.println("Credito: " + creditoMacchina + "€");
-			risposta = "n";
-
 			// Stampa elenco prodotti
-			for (i = 0; i < codiceProdotto.length; i++) {
-				System.out.println("Codice: " + codiceProdotto[i] + " |" + " Nome: " + nomeProdotto[i] + " |"
-						+ " Prezzo: " + prezzoProdotto[i] + "€" + " |" + " Quantita: " + quantitaProdotto[i]);
+			for (i = 0; i < codProdotto.length; i++) {
+				System.out.println("Codice: " + codProdotto[i] + " |" + " Nome: " + nomeProdotto[i] + " |" + " Prezzo: "
+						+ prezzoProdotto[i] + "€" + " |" + " Quantita: " + qtaProdotto[i]);
 			}
-			do { // Inizio do-while per verificare se il codice è valido
+			System.out.println(credMacchina + "€");
+			System.out.println("Inserisci credito: ");
+			credUtente = sc.nextDouble();
+			sc.nextLine();
+			credMacchina += credUtente;
+			System.out.println(credMacchina + "€");
 
-				// Inserimento codice
-				System.out.println("Inserisci il codice del prodotto desiderato: ");
-				codiceValido = false;
-				codiceInserito = sc.nextInt();
+			// Inizio ciclo per verifica codice
+			do {
+				resto = 0;
+				modifica = false;
+				codValido = false;
+				credUtente = 0;
+				zuccheroValido = false;
+				System.out.println("Inserire codice del prodotto...");
+				codInserito = sc.nextInt();
 				sc.nextLine();
-
-				for (i = 0; i < codiceProdotto.length; i++)
-					// Verifica codice inserito
-					if (codiceInserito == codiceProdotto[i]) {
+				// Verifica se il codice è uguale al prodotto per proseguire con l'acquisto
+				for (i = 0; i < codProdotto.length; i++) {
+					if (codInserito == codProdotto[i]) {
 						System.out.println("Hai selezionato il prodotto: " + nomeProdotto[i]);
-						codiceValido = true;
-
-						do { // Inizio do while per verificare validità del prodotto
-
-							// Verifica che il prodotto sia disponibile
-							if (quantitaProdotto[i] == 0) {
-								System.out.println("Prodotto non disponibile...");
-								codiceValido = false;
-								break;
-								// Riduzione della quantità dall'array se il prodotto è disponibile
-							} else {
-								quantitaProdotto[i]--;
-							}
-
-							// Verifica se l'importo è sufficiente
-							if (creditoMacchina >= prezzoProdotto[i]) {
-								resto = creditoMacchina - prezzoProdotto[i];
-								// Verifica se il resto è disponibile
-								if (resto >= 0) {
-									System.out.println("Erogazione resto di " + resto + " €...");
-									creditoUtente = 0;
-								}
-								// Se l'importo non è sufficiente reinserire credito
-							} else {
-								System.out.println("Credito insufficiente, inserire l'importo di: "
-										+ (prezzoProdotto[i] - creditoMacchina) + "€");
-								System.out.println("Inserire credito: ");
-								creditoMacchina += sc.nextDouble();
-								sc.nextLine();
-							}
-
-							// Verifica se la bevanda è fredda o meno
-							if (bevandaFredda[i] > 0) {
-								System.out.println("Erogazione prodotto...");
-							} else {
-								do { // Inizio do while per verifica validità zucchero
-									System.out.println("Inserisci livello di zuccherro da 1 a 5");
-									livZucchero = sc.nextInt();
-									sc.nextLine();
-									if (livZucchero > 0 && livZucchero <= 5) {
-										System.out.println("Erogazione bicchiere di plastica...");
-										System.out.println("Erogazione zucchero...");
-										System.out.println("Erogazione bastoncino di legno...");
-										zuccheroValido = true;
-									} else {
-										System.out.println("Livello zucchero errato, riprovare.");
-									}
-									// Fine ciclo do while per verifica di validità zucchero
-								} while (!zuccheroValido);
-							}
-							// Fine do while per verifica importo sufficiente
-						} while (creditoMacchina < prezzoProdotto[i]);
-						
-						creditoMacchina -= prezzoProdotto[i];
-						creditoMacchina = 0;
-						creditoMacchina += resto;
-						resto = 0;
-						
-						// Se codice inserito = 300 allora entra nella pagina gestore
-					} else if (codiceInserito == 300) {
-						System.out.println("Benvenuto nella gestione dei prodotti!");
-						modifica = true;
-
-						// Inizio do while per la modifica del prodotto
-						do {
-							// Mostra schermata di gestione
-							System.out.println("1. Modifica quantità prodotto");
-							System.out.println("2. Modifica nome prodotto");
-							System.out.println("3. Modifica prezzo prodotto");
-							System.out.println("4. Esci dalla gestione");
-							System.out.println("Seleziona un'opzione: ");
-							codiceGestore = sc.nextInt();
-							sc.nextLine();
-
-							// Aggiornamento quantità
-							if (codiceGestore == 1) {
-								// Inserimento codice prodotto da modificare
-								System.out.println("Inserisci codice prodotto da modificare: ");
-								codiceModifica = sc.nextInt();
-								sc.nextLine();
-								System.out.println("Inserisci nuova quantità: ");
-								nuovaQuantita = sc.nextInt();
-								sc.nextLine();
-								quantitaProdotto[i] += nuovaQuantita;
-								// Aggiornamento nome
-							} else if (codiceGestore == 2) {
-								// Inserimento codice prodotto da modificare
-								System.out.println("Inserisci codice prodotto da modificare: ");
-								codiceModifica = sc.nextInt();
-								sc.nextLine();
-								System.out.println("Inserisci nuovo nome: ");
-								nuovoNome = sc.nextLine();
-								nomeProdotto[i] = nuovoNome;
-								// Aggiornamento prezzo
-							} else if (codiceGestore == 3) {
-								// Inserimento codice prodotto da modificare
-								System.out.println("Inserisci codice prodotto da modificare: ");
-								codiceModifica = sc.nextInt();
-								sc.nextLine();
-								System.out.println("Inserisci nuovo prezzo prodotto: ");
-								nuovoPrezzo = sc.nextInt();
-								sc.nextLine();
-								prezzoProdotto[i] = nuovoPrezzo;
-								// Uscita dalla gestione
-							} else if (codiceGestore == 4) {
-								modifica = false;
-								break;
-							}
-							// Stampa elenco prodotti
-							for (i = 0; i < codiceProdotto.length; i++) {
-								System.out.println("Codice: " + codiceProdotto[i] + " |" + " Nome: " + nomeProdotto[i]
-										+ " |" + " Prezzo: " + prezzoProdotto[i] + "€" + " |" + " Quantita: "
-										+ quantitaProdotto[i]);
-							}
-							System.out.println();
-						} while (!modifica);
-
-					} else {
-						System.out.println("Il codice inserito non è valido, riprova.");
+						codValido = true;
+						break;
 					}
+				}
+				// Verifica se il codice è uguale a 300 per entrare nella gestione prodotti
+				if (codInserito == 300) {
+					System.out.println("Benvenuto nella gestione dei prodotti!");
+					modifica = true;
+					break;
+				} else if (!codValido && codInserito != 0) {
+					System.out.println("Codice errato, si prega di reinserire il codice...");
+				}
 
-				// Fine ciclo do while per verifica codice
-			} while (!codiceValido);
+			} while (!codValido);
+			// Verifica di modifica false per proseguire con acquisto prodotto
+			if (!modifica) {
+				// Inizio ciclo per verifica quantità prodotto
+				do {
+					prodValido = false;
+					if (qtaProdotto[i] == 0) {
+						System.out.println("Prodotto non disponibile, reinserire il codice...");
+						break;
+					} else {
+						prodValido = true;
+						qtaProdotto[i]--;
+					}
+				} while (!prodValido);
 
-			System.out.println("Vuoi acquistare un altro prodotto?");
+				// Se il prodotto è valido allora verifica se il credito è sufficiente
+				if (prodValido) {
+
+					if (credMacchina >= prezzoProdotto[i]) {
+						resto = credMacchina - prezzoProdotto[i];
+						if (resto >= 0) {
+							System.out.println("Erogazione resto di " + resto + " €...");
+							credUtente = 0;
+							credMacchina = 0;
+							credMacchina += resto;
+							resto = 0;
+						}
+						// Continua fino a quando il credito non è sufficiente per l'acquisto del
+						// prodotto
+					} else {
+						while (credMacchina >= prezzoProdotto[i]) {
+							System.out.println("Credito insufficiente, inserire l'importo di: "
+									+ (prezzoProdotto[i] - credMacchina) + "€");
+							System.out.println("Inserire credito: ");
+							credMacchina += sc.nextDouble();
+							sc.nextLine();
+						}
+					}
+				}
+				// Verifica se la bevanda è fredda o no
+				if (bevandaFredda[i] > 0) {
+					System.out.println("Erogazione prodotto...");
+
+				} else {
+					// Inizio ciclo per verifica zucchero
+					while (!zuccheroValido) {
+						System.out.println("Inserisci livello di zuccherro da 1 a 5");
+						livZucchero = sc.nextInt();
+						sc.nextLine();
+						if (livZucchero > 0 && livZucchero <= 5) {
+							System.out.println("Erogazione bicchiere di plastica...");
+							System.out.println("Erogazione zucchero...");
+							System.out.println("Erogazione bastoncino di legno...");
+							zuccheroValido = true;
+						} else {
+							System.out.println("Livello zucchero errato, riprovare.");
+						}
+					}
+				}
+
+			} else if (modifica) {
+				// Entra nella gestione prodotto se modifica è su true
+				while (modifica) {
+					codModificaValido = false;
+					// Mostra schermata di gestione
+					System.out.println("1. Modifica quantità prodotto");
+					System.out.println("2. Modifica nome prodotto");
+					System.out.println("3. Modifica prezzo prodotto");
+					System.out.println("4. Ritira credito");
+					System.out.println("5. Esci dalla gestione");
+					System.out.println("Seleziona un'opzione: ");
+					codGestore = sc.nextInt();
+					sc.nextLine();
+						// Inserimento codice prodotto da modificare
+						System.out.println("Inserisci codice prodotto da modificare: ");
+						codModifica = sc.nextInt();
+						sc.nextLine();
+						// Verifico se il codice è valido
+						for (i = 0; i < codProdotto.length; i++) {
+							if (codModifica == codProdotto[i]) {
+								codModificaValido = true;
+								break;
+							}
+						}
+					
+					System.out.println("Hai selezionato il prodotto: " + nomeProdotto[i]);
+					// Se il codice è valido entro nella gestione
+					if (codModificaValido) {
+						// Aggiornamento quantità
+						if (codGestore == 1) {
+							System.out.println("Inserisci nuova quantità: ");
+							nuovaQta = sc.nextInt();
+							sc.nextLine();
+							qtaProdotto[i] += nuovaQta;
+							// Aggiornamento nome
+						} else if (codGestore == 2) {
+							System.out.println("Inserisci nuovo nome: ");
+							nuovoNome = sc.nextLine();
+							nomeProdotto[i] = nuovoNome;
+							// Aggiornamento prezzo
+						} else if (codGestore == 3) {
+							System.out.println("Inserisci nuovo prezzo prodotto: ");
+							nuovoPrezzo = sc.nextInt();
+							sc.nextLine();
+							prezzoProdotto[i] = nuovoPrezzo;
+							// Ritiro resto
+						} else if (codGestore == 4) {
+							System.out.println("Ritiro del credito residuo");
+							credUtente += credMacchina;
+							System.out.println("Stai ritirando " + credUtente + "€");
+							credMacchina = 0;
+							// Uscita dalla gestione
+						} else if (codGestore == 5) {
+							modifica = false;
+							break;
+						}
+					}
+					// Mostra prodotti per verificare le modifiche apportate
+					for (i = 0; i < codProdotto.length; i++) {
+						System.out.println("Codice: " + codProdotto[i] + " |" + " Nome: " + nomeProdotto[i] + " |"
+								+ " Prezzo: " + prezzoProdotto[i] + "€" + " |" + " Quantita: " + qtaProdotto[i]);
+					}
+				}
+			}
+			// Mostra messaggio di fine ciclo acquisto
+			System.out.println("Acquistare un altro prodotto?");
 			risposta = sc.nextLine();
 
 		} while (risposta.equalsIgnoreCase("s"));
-		System.out.println("Arrivederci.");
 	}
+
 }
