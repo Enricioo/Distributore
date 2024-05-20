@@ -23,7 +23,7 @@ public class Main {
 		String risposta;
 		double resto;
 
-		// Inizio ciclo acquisto
+		// Inizio ciclo programma
 		do {
 			// Stampa elenco prodotti
 			for (i = 0; i < codProdotto.length; i++) {
@@ -61,7 +61,7 @@ public class Main {
 					modifica = true;
 					break;
 					// Verifica se il codice è uguale a 301 per ritiro credito residuo
-				}  else if (codInserito == 301) {
+				} else if (codInserito == 301) {
 					System.out.println("Ritiro del credito residuo...");
 					credUtente += credMacchina;
 					System.out.println("Stai ritirando " + credMacchina + "€");
@@ -100,10 +100,12 @@ public class Main {
 							credMacchina += resto;
 							resto = 0;
 						}
-						// Continua fino a quando il credito non è sufficiente per l'acquisto del prodotto
+						// Continua fino a quando il credito non è sufficiente per l'acquisto del
+						// prodotto
 					} else {
-						do  {
-							System.out.println("Credito insufficiente, inserire l'importo di: " + (prezzoProdotto[i] - credMacchina) + "€");
+						do {
+							System.out.println("Credito insufficiente, inserire l'importo di: "
+									+ (prezzoProdotto[i] - credMacchina) + "€");
 							System.out.println("Inserire credito: ");
 							credMacchina += sc.nextDouble();
 							sc.nextLine();
@@ -143,6 +145,7 @@ public class Main {
 					System.out.println("Seleziona un'opzione: ");
 					codGestore = sc.nextInt();
 					sc.nextLine();
+					if (codGestore != 4) {
 						// Inserimento codice prodotto da modificare
 						System.out.println("Inserisci codice prodotto da modificare: ");
 						codModifica = sc.nextInt();
@@ -154,32 +157,34 @@ public class Main {
 								break;
 							}
 						}
-					System.out.println("Hai selezionato il prodotto: " + nomeProdotto[i]);
-					// Se il codice è valido entra nella modifica del prodotto selezionato
-					if (codModificaValido) {
-						// Aggiornamento quantità
-						if (codGestore == 1) {
-							System.out.println("Inserisci nuova quantità: ");
-							nuovaQta = sc.nextInt();
-							sc.nextLine();
-							qtaProdotto[i] += nuovaQta;
-							// Aggiornamento nome
-						} else if (codGestore == 2) {
-							System.out.println("Inserisci nuovo nome: ");
-							nuovoNome = sc.nextLine();
-							nomeProdotto[i] = nuovoNome;
-							// Aggiornamento prezzo
-						} else if (codGestore == 3) {
-							System.out.println("Inserisci nuovo prezzo prodotto: ");
-							nuovoPrezzo = sc.nextInt();
-							sc.nextLine();
-							prezzoProdotto[i] = nuovoPrezzo;
-							// Uscita dalla gestione
-						} else if (codGestore == 4) {
-							modifica = false;
-							break;
+						System.out.println("Hai selezionato il prodotto: " + nomeProdotto[i]);
+						// Se il codice è valido entra nella modifica del prodotto selezionato
+						if (codModificaValido) {
+							// Aggiornamento quantità
+							if (codGestore == 1) {
+								System.out.println("Inserisci nuova quantità: ");
+								nuovaQta = sc.nextInt();
+								sc.nextLine();
+								qtaProdotto[i] += nuovaQta;
+								// Aggiornamento nome
+							} else if (codGestore == 2) {
+								System.out.println("Inserisci nuovo nome: ");
+								nuovoNome = sc.nextLine();
+								nomeProdotto[i] = nuovoNome;
+								// Aggiornamento prezzo
+							} else if (codGestore == 3) {
+								System.out.println("Inserisci nuovo prezzo prodotto: ");
+								nuovoPrezzo = sc.nextInt();
+								sc.nextLine();
+								prezzoProdotto[i] = nuovoPrezzo;
+							}
 						}
+						// Uscita dalla gestione
+					} else if (codGestore == 4) {
+						modifica = false;
+						break;
 					}
+
 					// Mostra prodotti per verificare le modifiche apportate
 					for (i = 0; i < codProdotto.length; i++) {
 						System.out.println("Codice: " + codProdotto[i] + " |" + " Nome: " + nomeProdotto[i] + " |"
@@ -187,7 +192,7 @@ public class Main {
 					}
 				}
 			}
-			// Mostra messaggio di fine ciclo acquisto
+			// Mostra messaggio alla fine del ciclo del programma
 			System.out.println("Acquistare un altro prodotto?");
 			risposta = sc.nextLine();
 
